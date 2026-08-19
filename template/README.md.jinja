@@ -11,13 +11,13 @@
 {{short_description}}
 
 It registers the custom item type `{{item_type_name}}` (implemented by
-[`{{package_name}}.models.{{item_class_name}}`](src/{{package_name}}/models.py)) with *datalab*
+[`{{package_name}}.models.{{item_class_name}}`](https://github.com/{{repository_namespace}}/{{repository_name}}/blob/main/src/{{package_name}}/models.py)) with *datalab*
 via the `pydatalab.item_types` entry point, making it available through the standard item
 endpoints and the web UI.
 
 {% if include_custom_panel -%}
 The item's fields are rendered in the web UI by the custom panel
-[`{{item_class_name}}Panel.vue`](src/{{package_name}}/webapp/{{item_class_name}}Panel.vue),
+[`{{item_class_name}}Panel.vue`](https://github.com/{{repository_namespace}}/{{repository_name}}/blob/main/src/{{package_name}}/webapp/{{item_class_name}}Panel.vue),
 which is discovered and bundled into the webapp by running `uv run invoke dev.collect-plugin-panels`
 in the *datalab* repository after installing this plugin (see [INSTALL.md](INSTALL.md)).
 {%- else -%}
