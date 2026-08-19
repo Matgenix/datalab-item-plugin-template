@@ -1,0 +1,95 @@
+"""An example custom item type registered via this package's
+``pydatalab.item_types`` entry point.
+
+TODO for plugin authors:
+
+    1. Replace the example fields below with your own data model.
+    2. Keep the entry point in ``pyproject.toml`` in sync (one line per item
+       model; the entry point name should match the model's ``type`` literal).
+
+How the fields end up in the UI:
+
+{% if include_custom_panel -%}
+- This plugin ships a custom panel (``webapp/{{item_class_name}}Panel.vue``),
+  so that panel is responsible for rendering ALL of this model's custom fields
+  (datalab does not render the leftover fields for you). The ``datalab_*``
+  schema hints below still control summary projection and API-side validation.
+{%- else -%}
+- Without a custom panel, datalab renders every custom field automatically from
+  its type and the ``datalab_*`` schema hints below (strings, numbers, enums,
+  booleans, item references, values-with-units, ...).
+{%- endif %}
+
+The valid ``datalab_*`` hints are defined (and validated at registration) in
+``pydatalab.models.schema_hints``:
+
+- fields: ``datalab_include_field_in_summary``, ``datalab_hidden``,
+  ``datalab_multiline``, ``datalab_section``, ``datalab_ref_types``,
+  ``datalab_unit_field``, ``datalab_units``, ``datalab_default_unit``
+- model config: ``datalab_ui_color``, ``datalab_ui_hidden_fields``,
+  ``datalab_section_title``, ``datalab_base_type``
+"""
+
+from typing import Literal
+
+from pydantic import ConfigDict, Field
+
+from pydatalab.models.samples import Sample
+from pydatalab.models.utils import EntryReference
+
+
+class {{item_class_name}}(Sample):
+    """TODO: describe your item type; this docstring is shown in the generated docs."""
+
+    # This example derives from `Sample`, so it inherits all sample behaviour
+    # (relationships, files, blocks, ...). Any concrete `Item` subclass works.
+    model_config = ConfigDict(
+        title="{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', ' ') }}",
+        json_schema_extra={
+            # Accent colour for this item type in the UI.
+            "datalab_ui_color": "#3a7ca5",
+            # Inherited fields that make no sense for this type can be hidden.
+            "datalab_ui_hidden_fields": ["synthesis_information"],
+            # Title of the card containing the fields without a `datalab_section`.
+            "datalab_section_title": "{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', ' ') }}",
+        },
+    )
+
+    # The unique type identifier for this model; it must not collide with a
+    # built-in type (samples, cells, starting_materials, equipment) or another plugin.
+    type: Literal["{{item_type_name}}"] = "{{item_type_name}}"  # type: ignore[assignment]
+
+    example_reference: EntryReference | None = Field(
+        None,
+        description="A reference to another item, rendered as a search-and-select widget "
+        "restricted to the given item types.",
+        json_schema_extra={"datalab_ref_types": ["starting_materials", "samples"]},
+    )
+
+    example_quantity: float | None = Field(
+        None,
+        ge=0,
+        description="A number with a unit dropdown; the chosen unit is stored in the "
+        "companion field below. Also projected into item listings via "
+        "`datalab_include_field_in_summary`.",
+        json_schema_extra={
+            "datalab_include_field_in_summary": True,
+            "datalab_units": ["g", "mg"],
+            "datalab_default_unit": "g",
+            "datalab_unit_field": "example_quantity_unit",
+        },
+    )
+    example_quantity_unit: Literal["g", "mg"] = Field(
+        "g", json_schema_extra={"datalab_hidden": True}
+    )
+
+    example_choice: Literal["one", "two", "three"] | None = Field(
+        None, description="A `Literal` renders as a dropdown."
+    )
+
+    example_notes: str | None = Field(
+        None,
+        description="A multi-line text field, grouped into its own 'Notes' card "
+        "via `datalab_section`.",
+        json_schema_extra={"datalab_multiline": True, "datalab_section": "Notes"},
+    )

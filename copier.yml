@@ -1,0 +1,90 @@
+# ====== jinja ======
+# Configure template to use standard jinja2 syntax
+# From: https://github.com/Tecnativa/doodba-copier-template/blob/stable/copier.yml#L1-L10
+_min_copier_version: "9"
+_templates_suffix: .jinja
+_envops:
+  block_end_string: '%}'
+  block_start_string: '{%'
+  comment_end_string: '#}'
+  comment_start_string: '{#'
+  keep_trailing_newline: true
+  variable_end_string: '}}'
+  variable_start_string: '{{'
+_subdirectory: "template"
+_preserve_symlinks: true
+_tasks:
+  - command: [uv, lock]
+
+# questions
+project_name:
+  type: str
+  help: "Project name e.g., `datalab-item-plugin-solutions`"
+
+repository_name:
+  type: str
+  help: "The name of the repository (should be in 'kebab-case')"
+  default: "{{ project_name }}"
+
+package_name:
+  type: str
+  help: "Your Python package name (should be in 'snake_case'), e.g., `datalab_item_plugin_solutions`"
+  default: "{{ project_name|replace('-', '_')|lower }}"
+
+short_description:
+  type: str
+  help: "Short description of your package (one-liner)"
+  default: "{{ project_name }}."
+  validator: "{% if short_description|length > 82 %}Short description can have max 82 characters.{% endif %}"
+
+item_class_name:
+  type: str
+  help: "Python class name of your first item type (PascalCase), e.g., `Solution`"
+  default: "ExampleItem"
+  validator: >-
+    {% if not (item_class_name | regex_search('^[A-Z][A-Za-z0-9]*$')) %}
+    Use a valid PascalCase Python class name (letters and digits, starting with an uppercase letter).
+    {% endif %}
+
+item_type_name:
+  type: str
+  help: "The item type identifier stored in the database ('snake_case', conventionally plural), e.g., `solutions`"
+  default: "{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', '_') | lower }}s"
+  validator: >-
+    {% if not (item_type_name | regex_search('^[a-z][a-z0-9_]*$')) %}
+    Use lowercase letters, digits and underscores, starting with a letter.
+    {% elif item_type_name in ["samples", "cells", "starting_materials", "equipment", "collections", "people", "files"] %}
+    '{{ item_type_name }}' is reserved by datalab; pick a unique type name.
+    {% endif %}
+
+include_custom_panel:
+  type: bool
+  help: "Ship a custom Vue panel for this item type? (If not, datalab renders the fields automatically from their schema annotations.)"
+  default: false
+
+repository_namespace:
+  type: str
+  help: "The namespace of the repository (e.g., your GitHub username or organisation)"
+
+author_fullname:
+  type: str
+  help: "Your full name"
+
+author_email:
+  type: str
+  help: "Your email"
+
+copyright_holder:
+  type: str
+  help: "The name of the person/entity holding the copyright"
+  default: "{{ author_fullname }}"
+
+copyright_holder_email:
+  type: str
+  help: "The email of the person/entity holding the copyright"
+  default: "{{ author_email }}"
+
+copyright_date:
+  type: str
+  help: "The copyright date"
+  default: '{{ now().year }}'

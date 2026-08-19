@@ -1,0 +1,30 @@
+# <div align="center"><i>{{project_name}}</i></div>
+
+<div align="center">
+<a href="https://github.com/{{repository_namespace}}/{{repository_name}}/releases"><img src="https://badgen.net/github/release/{{repository_namespace}}/{{repository_name}}?icon=github&color=blue"></a>
+<a href="https://github.com/{{repository_namespace}}/{{repository_name}}"><img src="https://badgen.net/github/license/{{repository_namespace}}/{{repository_name}}?icon=license&color=purple"></a>
+<a href="https://{{repository_namespace}}.github.io/{{repository_name}}"><img src="https://github.com/{{repository_namespace}}/{{repository_name}}/actions/workflows/docs.yml/badge.svg"></a>
+</div>
+
+{{project_name}} is a [*datalab*](https://datalab-org.io) plugin generated using the [datalab-item-plugin-template](https://github.com/datalab-org/datalab-item-plugin-template) template.
+
+{{short_description}}
+
+It registers the custom item type `{{item_type_name}}` (implemented by
+[`{{package_name}}.models.{{item_class_name}}`](src/{{package_name}}/models.py)) with *datalab*
+via the `pydatalab.item_types` entry point, making it available through the standard item
+endpoints and the web UI.
+
+{% if include_custom_panel -%}
+The item's fields are rendered in the web UI by the custom panel
+[`{{item_class_name}}Panel.vue`](src/{{package_name}}/webapp/{{item_class_name}}Panel.vue),
+which is discovered and bundled into the webapp by running `uv run invoke dev.collect-plugin-panels`
+in the *datalab* repository after installing this plugin (see [INSTALL.md](INSTALL.md)).
+{%- else -%}
+The item's fields carry `datalab_*` schema annotations and are rendered automatically by the
+*datalab* web UI — no JavaScript is needed in this plugin. If you later want full control over
+the rendering, add a `webapp/{{item_class_name}}Panel.vue` component to the package (you can
+regenerate from the template with `include_custom_panel` enabled to get a starting point).
+{%- endif %}
+
+Releases are created via semantic version tags on [GitHub](https://github.com/{{repository_namespace}}/{{repository_name}}/releases).

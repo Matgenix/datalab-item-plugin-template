@@ -1,0 +1,39 @@
+name: Template
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        custom_panel: ["true", "false"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.11.x"
+      - name: Generate project
+        run: |
+          uvx copier copy --trust --defaults \
+            --data project_name="datalab-item-plugin-generated" \
+            --data include_custom_panel=${{ matrix.custom_panel }} \
+            --data repository_namespace="datalab-org" \
+            --data author_fullname="CI" \
+            --data author_email="dev@datalab-org.io" \
+            . generated
+      - name: Lock and test generated project
+        working-directory: generated
+        run: |
+          git init -q && git add . # pre-commit and setuptools_scm need a repo
+          uv sync --locked --all-extras --dev
+          uv run pre-commit run --all-files --show-diff-on-failure
+          uv run pytest -rs -vvv ./tests
+          uv build
