@@ -45,3 +45,10 @@ uvx copier update
 ```
 
 Releases of the plugin are created via semantic version tags on GitHub.
+
+Two example uses of this template can be found at
+[datalab-item-plugin-example](https://github.com/Matgenix/datalab-item-plugin-example)
+(fields rendered automatically from schema annotations, no JavaScript) and
+[datalab-item-plugin-example-custom-vue](https://github.com/Matgenix/datalab-item-plugin-example-custom-vue)
+(a custom Vue panel, whose `mixed_solutions` items are blended from the first
+example's `solutions` items — install both together).
