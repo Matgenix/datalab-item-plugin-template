@@ -65,6 +65,7 @@ include_custom_panel:
 repository_namespace:
   type: str
   help: "The namespace of the repository (e.g., your GitHub username or organisation)"
+  default: "Matgenix"
 
 author_fullname:
   type: str

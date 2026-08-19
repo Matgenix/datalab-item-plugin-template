@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > This repository is still under active development and will have some rough edges.
-Please raise any issues in the [Issue Tracker](https://github.com/datalab-org/datalab-item-plugin-template/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen) or contact us via the routes listed at [datalab-org](https://github.com/datalab-org).
+Please raise any issues in the [Issue Tracker](https://github.com/Matgenix/datalab-item-plugin-template/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen) or contact us via the routes listed at [datalab-org](https://github.com/datalab-org).
 
 A [Copier](https://github.com/copier-org/copier) template for [*datalab*](https://datalab-org.io) plugins that register **custom item types** via the `pydatalab.item_types` entry point (the sibling of [datalab-app-plugin-template](https://github.com/datalab-org/datalab-app-plugin-template), which targets *block* plugins).
 
@@ -24,7 +24,7 @@ rendering of all the item's custom fields and is bundled into the webapp with
 We recommend using `uv` to manage Python versions and environments, in which case the template can be used with:
 
 ```shell
-uvx copier copy "git@github.com:datalab-org/datalab-item-plugin-template" <my_plugin>
+uvx copier copy "git@github.com:Matgenix/datalab-item-plugin-template" <my_plugin>
 ```
 
 This will guide you through the process of creating a new repository for your plugin.
