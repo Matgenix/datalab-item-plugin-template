@@ -1,5 +1,7 @@
 from importlib.metadata import entry_points
+{%- if include_custom_panel %}
 from pathlib import Path
+{%- endif %}
 
 from {{ package_name }} import __version__
 from {{ package_name }}.models import {{ item_class_name }}
@@ -29,7 +31,8 @@ def test_model_round_trip():
     item = {{ item_class_name }}(item_id="test-item-1")
     assert item.type == "{{ item_type_name }}"
     assert {{ item_class_name }}(**item.model_dump()).item_id == "test-item-1"
-{% if include_custom_panel %}
+{%- if include_custom_panel %}
+
 
 def test_panel_follows_naming_convention():
     """`invoke dev.collect-plugin-panels` looks for `webapp/<ClassName>Panel.vue`
@@ -38,4 +41,4 @@ def test_panel_follows_naming_convention():
 
     package_dir = Path({{ package_name }}.__file__).parent
     assert (package_dir / "webapp" / "{{ item_class_name }}Panel.vue").is_file()
-{% endif %}
+{%- endif %}

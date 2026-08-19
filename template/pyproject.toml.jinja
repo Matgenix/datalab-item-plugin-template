@@ -66,8 +66,8 @@ per-file-ignores = {}
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "datalab-server[server,apps]",
     "pytest ~= 8.2",
     "pytest-cov ~= 5.0",
