@@ -24,12 +24,12 @@ def test_model_registers_with_datalab():
     from pydatalab.models import ITEM_MODELS, register_item_model
 
     register_item_model({{ item_class_name }})
-    assert ITEM_MODELS["{{ item_type_name }}"] is {{ item_class_name }}
+    assert ITEM_MODELS["_{{ item_type_name }}"] is {{ item_class_name }}
 
 
 def test_model_round_trip():
     item = {{ item_class_name }}(item_id="test-item-1")
-    assert item.type == "{{ item_type_name }}"
+    assert item.type == "_{{ item_type_name }}"
     assert {{ item_class_name }}(**item.model_dump()).item_id == "test-item-1"
 {%- if include_custom_panel %}
 

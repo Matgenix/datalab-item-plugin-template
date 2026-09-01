@@ -18,8 +18,8 @@ endpoints and the web UI.
 {% if include_custom_panel -%}
 The item's fields are rendered in the web UI by the custom panel
 [`{{item_class_name}}Panel.vue`](https://github.com/{{repository_namespace}}/{{repository_name}}/blob/main/src/{{package_name}}/webapp/{{item_class_name}}Panel.vue),
-which is discovered and bundled into the webapp by running `uv run invoke dev.collect-plugin-panels`
-in the *datalab* repository after installing this plugin (see [INSTALL.md](INSTALL.md)).
+which is discovered and bundled automatically when *datalab* installs its declared plugins and
+builds the webapp (see [INSTALL.md](INSTALL.md)).
 {%- else -%}
 The item's fields carry `datalab_*` schema annotations and are rendered automatically by the
 *datalab* web UI — no JavaScript is needed in this plugin. If you later want full control over

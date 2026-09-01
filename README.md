@@ -7,10 +7,10 @@ Please raise any issues in the [Issue Tracker](https://github.com/Matgenix/datal
 A [Copier](https://github.com/copier-org/copier) template for [*datalab*](https://datalab-org.io) plugins that register **custom item types** via the `pydatalab.item_types` entry point (the sibling of [datalab-app-plugin-template](https://github.com/datalab-org/datalab-app-plugin-template), which targets *block* plugins).
 
 > [!IMPORTANT]
-> Custom item types are not yet part of a released *datalab* version; generated
-> plugins currently develop against the `ml-evs/custom-items` branch of
-> [datalab-org/datalab](https://github.com/datalab-org/datalab) (wired up in the
-> generated `pyproject.toml` via `[tool.uv.sources]`).
+> Custom item types are now available on *datalab*'s `main` branch, but are not
+> yet part of a released version. Generated plugins therefore develop against
+> [datalab-org/datalab](https://github.com/datalab-org/datalab)'s `main` branch,
+> configured in the generated `pyproject.toml` via `[tool.uv.sources]`.
 
 The generated plugin contains a documented example item model demonstrating the
 `datalab_*` schema annotations (references to other items, values with units,
@@ -19,7 +19,8 @@ enums, multi-line text, field sections, summary projection, ...). By default the
 JavaScript required. Answer *yes* to the `include_custom_panel` question to also
 scaffold a custom Vue panel (`webapp/<ClassName>Panel.vue`), which takes over
 rendering of all the item's custom fields and is bundled into the webapp with
-`invoke dev.collect-plugin-panels`.
+the plugin installation/build workflow. No separate panel-collection step is
+required.
 
 We recommend using `uv` to manage Python versions and environments, in which case the template can be used with:
 
