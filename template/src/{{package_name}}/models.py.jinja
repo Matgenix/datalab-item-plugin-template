@@ -25,7 +25,7 @@ The valid ``datalab_*`` hints are defined (and validated at registration) in
 
 - fields: ``datalab_include_field_in_summary``, ``datalab_hidden``,
   ``datalab_multiline``, ``datalab_section``, ``datalab_ref_types``,
-  ``datalab_unit_field``, ``datalab_units``, ``datalab_default_unit``
+  ``datalab_quantity``
 - model config: ``datalab_ui_color``, ``datalab_ui_hidden_fields``,
   ``datalab_section_title``, ``datalab_base_type``
 """
@@ -68,19 +68,24 @@ class {{item_class_name}}(Sample):
     example_quantity: float | None = Field(
         None,
         ge=0,
-        description="A number with a unit dropdown; the chosen unit is stored in the "
-        "companion field below. Also projected into item listings via "
+        description="A number stored canonically in grams with a unit dropdown. "
+        "The presentation preference is stored separately below. Also projected via "
         "`datalab_include_field_in_summary`.",
         json_schema_extra={
             "datalab_include_field_in_summary": True,
-            "datalab_units": ["g", "mg"],
-            "datalab_default_unit": "g",
-            "datalab_unit_field": "example_quantity_unit",
+            "datalab_quantity": {
+                "canonical_unit": "g",
+                "display_units": {
+                    "g": {"scale": 1.0},
+                    "mg": {"scale": 0.001},
+                },
+                "default_display_unit": "g",
+                "display_unit_field": "example_quantity_display_unit",
+            },
         },
     )
-    example_quantity_unit: Literal["g", "mg"] = Field(
-        "g", json_schema_extra={"datalab_hidden": True}
-    )
+    example_quantity_display_unit: Literal["g", "mg"] | None = None
+    """Presentation preference only; ``example_quantity`` always uses grams."""
 
     example_choice: Literal["one", "two", "three"] | None = Field(
         None, description="A `Literal` renders as a dropdown."

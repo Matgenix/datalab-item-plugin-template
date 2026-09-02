@@ -52,7 +52,7 @@
           />
         </div>
 
-        <!-- A number with its unit stored in a companion field. -->
+        <!-- A canonical value with its presentation unit stored separately. -->
         <div class="form-group">
           <label class="mb-1">Example quantity</label>
           <div class="input-group quantity-group">
@@ -61,13 +61,13 @@
               step="any"
               min="0"
               class="form-control"
-              :value="itemData.example_quantity ?? ''"
-              @change="updateNumber('example_quantity', $event.target.value)"
+              :value="exampleQuantityDisplayValue"
+              @change="updateExampleQuantity($event.target.value)"
             />
             <select
               class="form-control unit-select"
-              :value="itemData.example_quantity_unit || 'g'"
-              @change="update('example_quantity_unit', $event.target.value)"
+              :value="exampleQuantityDisplayUnit"
+              @change="update('example_quantity_display_unit', $event.target.value)"
             >
               <option value="g">g</option>
               <option value="mg">mg</option>
@@ -123,6 +123,14 @@ export default {
     itemData() {
       return this.$store.state.all_item_data[this.item_id] || {};
     },
+    exampleQuantityDisplayUnit() {
+      return this.itemData.example_quantity_display_unit || "g";
+    },
+    exampleQuantityDisplayValue() {
+      const canonicalGrams = this.itemData.example_quantity;
+      if (canonicalGrams === null || canonicalGrams === undefined) return "";
+      return this.exampleQuantityDisplayUnit === "mg" ? canonicalGrams * 1000 : canonicalGrams;
+    },
   },
   methods: {
     update(field, value) {
@@ -131,8 +139,19 @@ export default {
         item_data: { [field]: value },
       });
     },
-    updateNumber(field, raw) {
-      this.update(field, raw === "" ? null : Number(raw));
+    updateExampleQuantity(raw) {
+      const displayed = raw === "" ? null : Number(raw);
+      const canonicalGrams =
+        displayed === null || this.exampleQuantityDisplayUnit === "g"
+          ? displayed
+          : displayed * 0.001;
+      this.$store.commit("updateItemData", {
+        item_id: this.item_id,
+        item_data: {
+          example_quantity: canonicalGrams,
+          example_quantity_display_unit: this.exampleQuantityDisplayUnit,
+        },
+      });
     },
   },
 };
