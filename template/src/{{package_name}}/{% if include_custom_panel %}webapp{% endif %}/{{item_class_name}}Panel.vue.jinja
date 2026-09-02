@@ -1,10 +1,9 @@
 <!--
   Custom panel for the `{{item_type_name}}` item type.
 
-  Discovery convention: datalab's `invoke dev.collect-plugin-panels` copies any
-  `webapp/<ModelClassName>Panel.vue` found in this package into the webapp and
-  wires it up for the corresponding item type. Keep the file name in sync with
-  the model class name.
+  During installation and builds, datalab collects
+  `webapp/<ModelClassName>Panel.vue` and wires it up for the corresponding item
+  type. Keep the file name in sync with the model class name.
 
   IMPORTANT: because this panel exists, datalab does NOT auto-render the model's
   custom fields — this component is responsible for rendering ALL of them.
@@ -67,7 +66,7 @@
             <select
               class="form-control unit-select"
               :value="exampleQuantityDisplayUnit"
-              @change="update('example_quantity_display_unit', $event.target.value)"
+              @change="updateExampleQuantityDisplayUnit($event.target.value)"
             >
               <option value="g">g</option>
               <option value="mg">mg</option>
@@ -150,6 +149,18 @@ export default {
         item_data: {
           example_quantity: canonicalGrams,
           example_quantity_display_unit: this.exampleQuantityDisplayUnit,
+        },
+      });
+    },
+    updateExampleQuantityDisplayUnit(unit) {
+      const displayed = this.exampleQuantityDisplayValue;
+      const canonicalGrams =
+        displayed === "" ? null : unit === "g" ? Number(displayed) : Number(displayed) * 0.001;
+      this.$store.commit("updateItemData", {
+        item_id: this.item_id,
+        item_data: {
+          example_quantity: canonicalGrams,
+          example_quantity_display_unit: unit,
         },
       });
     },

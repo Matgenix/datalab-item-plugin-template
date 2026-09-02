@@ -1,32 +1,18 @@
 # Installation
 
-> [!IMPORTANT]
-> Custom item types are now available on *datalab*'s `main` branch, but are not
-> yet part of a released version. Until they are, this plugin must be installed
-> against [datalab-org/datalab](https://github.com/datalab-org/datalab)'s `main`
-> branch (the development environment below already does this via
-> `[tool.uv.sources]` in `pyproject.toml`).
-
 ## Development installation
 
-We recommend you use [`uv`](https://astral.sh/uv) for managing virtual environments and Python versions.
+Clone the plugin and install its development environment with [`uv`](https://astral.sh/uv):
 
-Once you have `uv` installed, you can clone this repository and install the package in a fresh virtual environment with:
-
-```
+```shell
 git clone git@github.com:{{ repository_namespace }}/{{ repository_name }}
 cd {{repository_name}}
 uv sync --all-extras --dev
 ```
 
-You can activate `pre-commit` in your local repository with `uv run pre-commit install`.
-This will call `pre-commit` automatically on every commit to check for code style and other issues, and will also be used in the CI.
-
 ## Installation in *datalab*
 
-Declare the plugin in `plugins.toml` at the root of a *datalab* checkout. The
-file is shared by native and Docker installations, and keeps plugin dependencies
-out of *datalab*'s core `pyproject.toml`:
+Add the plugin to `plugins.toml` at the root of the *datalab* checkout:
 
 ```toml
 dependencies = [
@@ -37,57 +23,19 @@ dependencies = [
 {{ project_name }} = { git = "https://github.com/{{ repository_namespace }}/{{ repository_name }}.git" }
 ```
 
-For native development, the source can instead be an editable local checkout
-(the path is resolved relative to *datalab*'s `plugins.toml`):
+For local development, use an editable path instead of the Git source:
 
 ```toml
 [tool.uv.sources]
 {{ project_name }} = { path = "../{{ repository_name }}", editable = true }
 ```
 
-Then install *datalab* and all declared plugins from its `pydatalab/` directory:
+Install *datalab* and its declared plugins from the `pydatalab/` directory:
 
 ```shell
 uv run invoke dev.install
 ```
 
-This installs the plugin and, when the complete webapp source is available,
-collects any custom Vue panels automatically.
-{% if include_custom_panel %}
-### Bundling the custom web UI panel
-
-This plugin ships a custom Vue panel
-(`src/{{package_name}}/webapp/{{item_class_name}}Panel.vue`). The *datalab*
-webapp does not load plugin JavaScript at runtime. Native `dev.install` and both
-Docker build profiles collect the panel before the webapp starts or compiles;
-there is no follow-up collection command.
-
-After changing the panel during Docker development, rebuild the development
-frontend and its panel artifact from the *datalab* root:
-
-```shell
-docker compose --profile dev up --build app-dev
-```
-{% endif %}
-### Docker development and production
-
-With `plugins.toml` in place, these are the complete Docker workflows from the
-*datalab* repository root:
-
-```shell
-docker compose --profile dev up --build
-docker compose --profile prod up --build
-```
-
-Docker builds cannot access an editable path outside the *datalab* build
-context. Use a Git source as shown above, or place the plugin checkout inside
-that context.
-
-### Other production deployments
-
-The process of deploying plugins in production is similar to the local approach
-above and depends on how you manage your *datalab* deployment. The recommended approach is to use the
-[`datalab-ansible-terraform`](https://github.com/datalab-industries/datalab-ansible-terraform)
-repository to manage your *datalab* deployment, which uses Ansible
-to deploy *datalab* on a remote server. Provide the same `plugins.toml` to the
-deployment so the plugin set remains explicit and reproducible.
+{% if include_custom_panel -%}
+The custom Vue panel is collected automatically during installation and builds.
+{%- endif %}

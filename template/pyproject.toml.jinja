@@ -79,10 +79,6 @@ dev = [
     "markdown-callouts ~= 0.4",
 ]
 
-# Custom item types are available on main but not yet part of a released
-# datalab-server version, so the development dependency tracks main for now.
-# TODO: once custom item types land in a datalab-server release, delete this
-# section and pin e.g. `datalab-server[server,apps] ~= 0.7` above instead.
 [tool.uv.sources]
 datalab-server = { git = "https://github.com/datalab-org/datalab", branch = "main", subdirectory = "pydatalab" }
 
