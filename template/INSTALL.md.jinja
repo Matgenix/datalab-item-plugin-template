@@ -35,7 +35,7 @@ Install *datalab* and its declared plugins from the `pydatalab/` directory:
 ```shell
 uv run invoke dev.install
 ```
+{%- if include_custom_panel %}
 
-{% if include_custom_panel -%}
 The custom Vue panel is collected automatically during installation and builds.
 {%- endif %}

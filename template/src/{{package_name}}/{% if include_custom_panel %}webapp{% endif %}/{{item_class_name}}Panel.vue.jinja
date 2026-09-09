@@ -43,6 +43,11 @@
               </button>
             </div>
           </div>
+          <!--
+            Built-in types are queried under their plain name. A custom type is
+            registered with a leading underscore, so a model declaring
+            `type: Literal["{{item_type_name}}"]` must be queried as `_{{item_type_name}}`.
+          -->
           <ItemSelect
             v-else
             :model-value="itemData.example_reference"
@@ -153,15 +158,12 @@ export default {
       });
     },
     updateExampleQuantityDisplayUnit(unit) {
-      const displayed = this.exampleQuantityDisplayValue;
-      const canonicalGrams =
-        displayed === "" ? null : unit === "g" ? Number(displayed) : Number(displayed) * 0.001;
+      // Changing the unit only changes how the stored value is presented: the
+      // canonical grams are left untouched, so 5 g becomes 5000 mg. This matches
+      // what datalab's own custom-fields panel does for a `datalab_quantity`.
       this.$store.commit("updateItemData", {
         item_id: this.item_id,
-        item_data: {
-          example_quantity: canonicalGrams,
-          example_quantity_display_unit: unit,
-        },
+        item_data: { example_quantity_display_unit: unit },
       });
     },
   },
