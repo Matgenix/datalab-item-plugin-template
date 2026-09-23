@@ -6,6 +6,13 @@ Please raise any issues in the [Issue Tracker](https://github.com/Matgenix/datal
 
 A [Copier](https://github.com/copier-org/copier) template for [*datalab*](https://datalab-org.io) plugins that register **custom item types** via the `pydatalab.item_types` entry point (the sibling of [datalab-app-plugin-template](https://github.com/datalab-org/datalab-app-plugin-template), which targets *block* plugins).
 
+Each model declares a complete canonical type identifier of the form `<namespace>-<type-name>`,
+such as `chemistry-solutions`. This full slug is the value used wherever the type is referenced.
+The namespace and type name are conceptual components of the naming convention only; datalab does
+not store or query them separately at present. The slug must match
+`^[a-z0-9]+(?:-[a-z0-9]+)+$`, and the `core-` namespace is reserved for datalab. A package may reuse
+one namespace across its models or publish models under different namespaces.
+
 The generated plugin contains a documented example item model demonstrating the
 `datalab_*` schema annotations (references to other items, values with units,
 enums, multi-line text, field sections, summary projection, ...). By default the
@@ -45,5 +52,5 @@ Two example uses of this template can be found at
 [datalab-item-plugin-example](https://github.com/Matgenix/datalab-item-plugin-example)
 (fields rendered automatically from schema annotations, no JavaScript) and
 [datalab-item-plugin-example-custom-vue](https://github.com/Matgenix/datalab-item-plugin-example-custom-vue)
-(a custom Vue panel, whose `mixed_solutions` items are blended from the first
-example's `solutions` items — install both together).
+(a custom Vue panel, whose `example-mixed-solutions` items are blended from the first
+example's `example-solutions` items — install both together).

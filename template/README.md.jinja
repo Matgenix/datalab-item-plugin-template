@@ -10,10 +10,13 @@
 
 {{short_description}}
 
-It registers the custom item type `{{item_type_name}}` (implemented by
+It registers the canonical custom item type `{{item_type_name}}` (implemented by
 [`{{package_name}}.models.{{item_class_name}}`](https://github.com/{{repository_namespace}}/{{repository_name}}/blob/main/src/{{package_name}}/models.py)) with *datalab*
 via the `pydatalab.item_types` entry point, making it available through the standard item
 endpoints and the web UI.
+
+The complete slug is used wherever the type is referenced. Its namespace and type name are
+conceptual components only; *datalab* does not store or query them separately at present.
 
 {% if include_custom_panel -%}
 The item's fields are rendered in the web UI by the custom panel

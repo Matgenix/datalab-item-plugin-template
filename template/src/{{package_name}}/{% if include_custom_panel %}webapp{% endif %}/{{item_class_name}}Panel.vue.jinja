@@ -12,7 +12,7 @@
   `TooltipIcon`, ...) resolve against the datalab webapp source at build time.
 -->
 <template>
-  <div class="container {{ item_type_name | replace('_', '-') }}-panel mt-3">
+  <div class="container {{ item_type_name }}-panel mt-3">
     <div class="plugin-card">
       <div class="plugin-card-header d-flex align-items-center justify-content-between">
         <span>{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', ' ') }}</span>
@@ -43,11 +43,6 @@
               </button>
             </div>
           </div>
-          <!--
-            Built-in types are queried under their plain name. A custom type is
-            registered with a leading underscore, so a model declaring
-            `type: Literal["{{item_type_name}}"]` must be queried as `_{{item_type_name}}`.
-          -->
           <ItemSelect
             v-else
             :model-value="itemData.example_reference"
@@ -171,7 +166,7 @@ export default {
 </script>
 
 <style scoped>
-.{{ item_type_name | replace('_', '-') }}-panel {
+.{{ item_type_name }}-panel {
   padding-bottom: 1rem;
 }
 .plugin-card {

@@ -48,13 +48,13 @@ item_class_name:
 
 item_type_name:
   type: str
-  help: "The item type identifier stored in the database ('snake_case', conventionally plural), e.g., `solutions`"
-  default: "{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', '_') | lower }}s"
+  help: "The complete canonical type identifier (`<namespace>-<type-name>`), e.g., `chemistry-solutions`"
+  default: "example-{{ item_class_name | regex_replace('^Example', '') | regex_replace('(?<!^)(?=[A-Z])', '-') | lower }}s"
   validator: >-
-    {% if not (item_type_name | regex_search('^[a-z][a-z0-9_]*$')) %}
-    Use lowercase letters, digits and underscores, starting with a letter.
-    {% elif item_type_name in ["samples", "cells", "starting_materials", "equipment", "collections", "people", "files"] %}
-    '{{ item_type_name }}' is reserved by datalab; pick a unique type name.
+    {% if not (item_type_name | regex_search('^[a-z0-9]+(?:-[a-z0-9]+)+$')) %}
+    Use a lowercase namespace-qualified slug such as 'chemistry-solutions'.
+    {% elif item_type_name | regex_search('^core-') %}
+    The 'core-' namespace is reserved by datalab; choose a namespace owned by your plugin or domain.
     {% endif %}
 
 include_custom_panel:
