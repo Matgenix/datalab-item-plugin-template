@@ -13,7 +13,7 @@ def test_version():
 
 def test_entry_point_is_registered():
     """The entry point is how datalab discovers this plugin at startup."""
-    eps = [ep for ep in entry_points(group="pydatalab.item_types") if ep.name == "{{ item_type_name }}"]
+    eps = [ep for ep in entry_points(group="pydatalab.item_types") if ep.name == "{{ item_type_name | replace(':', '-') }}"]
     assert len(eps) == 1
     assert eps[0].load() is {{ item_class_name }}
 

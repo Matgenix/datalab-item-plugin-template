@@ -48,13 +48,11 @@ item_class_name:
 
 item_type_name:
   type: str
-  help: "The complete canonical type identifier (`<namespace>-<type-name>`), e.g., `chemistry-solutions`"
-  default: "example-{{ item_class_name | regex_replace('^Example', '') | regex_replace('(?<!^)(?=[A-Z])', '-') | lower }}s"
+  help: "The complete canonical type identifier (`<namespace>:<type-name>`), e.g., `chemistry:solutions`"
+  default: "example:{{ item_class_name | regex_replace('^Example', '') | regex_replace('(?<!^)(?=[A-Z])', '-') | lower }}s"
   validator: >-
-    {% if not (item_type_name | regex_search('^[a-z0-9]+(?:-[a-z0-9]+)+$')) %}
-    Use a lowercase namespace-qualified slug such as 'chemistry-solutions'.
-    {% elif item_type_name | regex_search('^core-') %}
-    The 'core-' namespace is reserved by datalab; choose a namespace owned by your plugin or domain.
+    {% if not (item_type_name | regex_search('^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:-[a-z0-9]+)*$')) %}
+    Use a lowercase canonical identifier with exactly one colon, such as 'chemistry:solutions'.
     {% endif %}
 
 include_custom_panel:

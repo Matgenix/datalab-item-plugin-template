@@ -32,9 +32,9 @@ changelog = "https://github.com/{{repository_namespace}}/{{project_name}}/releas
 
 # Each entry point in this group is loaded by datalab at startup and registered
 # as a custom item type. Add one line per item model implemented in this plugin;
-# the entry point name should match the model's `type` literal.
+# the entry point name is only a packaging-safe discovery name.
 [project.entry-points.'pydatalab.item_types']
-{{item_type_name}} = "{{package_name}}.models:{{item_class_name}}"
+{{item_type_name | replace(':', '-')}} = "{{package_name}}.models:{{item_class_name}}"
 
 [tool.setuptools.packages.find]
 where = ["src"]

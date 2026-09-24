@@ -5,7 +5,8 @@ TODO for plugin authors:
 
     1. Replace the example fields below with your own data model.
     2. Keep the entry point in ``pyproject.toml`` in sync (one line per item
-       model; the entry point name should match the model's ``type`` literal).
+       model). Its key is only a packaging discovery name; the model's ``type``
+       literal is the canonical identifier used by datalab.
 
 How the fields end up in the UI:
 
@@ -54,7 +55,7 @@ class {{item_class_name}}(Sample):
         },
     )
 
-    # The complete canonical type identifier has the form `<namespace>-<type-name>`.
+    # The complete canonical type identifier has the form `<namespace>:<type-name>`.
     type: Literal["{{item_type_name}}"] = "{{item_type_name}}"  # type: ignore[assignment]
 
     example_reference: EntryReference | None = Field(

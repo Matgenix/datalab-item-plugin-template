@@ -12,7 +12,7 @@
   `TooltipIcon`, ...) resolve against the datalab webapp source at build time.
 -->
 <template>
-  <div class="container {{ item_type_name }}-panel mt-3">
+  <div class="container {{ item_type_name | replace(':', '-') }}-panel mt-3">
     <div class="plugin-card">
       <div class="plugin-card-header d-flex align-items-center justify-content-between">
         <span>{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', ' ') }}</span>
@@ -166,7 +166,7 @@ export default {
 </script>
 
 <style scoped>
-.{{ item_type_name }}-panel {
+.{{ item_type_name | replace(':', '-') }}-panel {
   padding-bottom: 1rem;
 }
 .plugin-card {
