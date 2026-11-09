@@ -46,16 +46,28 @@ item_class_name:
     Use a valid PascalCase Python class name (letters and digits, starting with an uppercase letter).
     {% endif %}
 
+item_namespace:
+  type: str
+  help: "The namespace of your item types, owned by your plugin or domain, e.g., `chemistry` or `battery-lab`. Choose a stable one: it is part of every stored item type identifier"
+  validator: >-
+    {% if not (item_namespace | regex_search('^[a-z0-9]+([-_][a-z0-9]+)*$')) %}
+    Use lowercase letters and digits, with single hyphens or underscores between words.
+    {% endif %}
+
 item_type_name:
   type: str
-  help: "The item type identifier stored in the database ('snake_case', conventionally plural), e.g., `solutions`"
+  help: "The type name within the namespace ('snake_case', conventionally plural), e.g., `solutions`"
   default: "{{ item_class_name | regex_replace('(?<!^)(?=[A-Z])', '_') | lower }}s"
   validator: >-
-    {% if not (item_type_name | regex_search('^[a-z][a-z0-9_]*$')) %}
-    Use lowercase letters, digits and underscores, starting with a letter.
-    {% elif item_type_name in ["samples", "cells", "starting_materials", "equipment", "collections", "people", "files"] %}
-    '{{ item_type_name }}' is reserved by datalab; pick a unique type name.
+    {% if not (item_type_name | regex_search('^[a-z0-9]+([-_][a-z0-9]+)*$')) %}
+    Use lowercase letters and digits, with single hyphens or underscores between words.
     {% endif %}
+
+# Computed, not asked: the canonical item type identifier stored by datalab.
+item_type_id:
+  type: str
+  default: "{{ item_namespace }}:{{ item_type_name }}"
+  when: false
 
 include_custom_panel:
   type: bool

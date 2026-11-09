@@ -25,6 +25,7 @@ jobs:
           uvx copier copy --trust --defaults \
             --data project_name="datalab-item-plugin-generated" \
             --data include_custom_panel=${{ matrix.custom_panel }} \
+            --data item_namespace="example" \
             --data repository_namespace="datalab-org" \
             --data author_fullname="CI" \
             --data author_email="dev@datalab-org.io" \

@@ -54,9 +54,9 @@ class {{item_class_name}}(Sample):
         },
     )
 
-    # The unique type identifier for this model; it must not collide with a
-    # built-in type (samples, cells, starting_materials, equipment) or another plugin.
-    type: Literal["{{item_type_name}}"] = "{{item_type_name}}"  # type: ignore[assignment]
+    # The canonical type identifier for this model, `<namespace>:<type-name>`. It is
+    # stored in the database and used in API payloads, so keep it stable.
+    type: Literal["{{item_type_id}}"] = "{{item_type_id}}"  # type: ignore[assignment]
 
     example_reference: EntryReference | None = Field(
         None,

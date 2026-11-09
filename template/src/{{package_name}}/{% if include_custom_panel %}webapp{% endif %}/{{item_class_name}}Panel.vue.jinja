@@ -1,5 +1,5 @@
 <!--
-  Custom panel for the `{{item_type_name}}` item type.
+  Custom panel for the `{{item_type_id}}` item type.
 
   During installation and builds, datalab collects
   `webapp/<ModelClassName>Panel.vue` and wires it up for the corresponding item
@@ -44,9 +44,8 @@
             </div>
           </div>
           <!--
-            Built-in types are queried under their plain name. A custom type is
-            registered with a leading underscore, so a model declaring
-            `type: Literal["{{item_type_name}}"]` must be queried as `_{{item_type_name}}`.
+            Built-in types are queried by their bare name, e.g. `samples`. A custom
+            type is queried by its full identifier, e.g. `{{item_type_id}}`.
           -->
           <ItemSelect
             v-else
